@@ -3,6 +3,8 @@ from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 import os
 
 TOKEN=os.environ.get('TOKEN')
+i=0
+j=0
 
 updater = Updater(TOKEN)
 dp = updater.dispatcher
@@ -12,8 +14,8 @@ def start(update: Update, context:CallbackContext):
 
     chat_id = update.message.chat.id
 
-    btn1 = KeyboardButton(text="👍 1")
-    btn2 = KeyboardButton(text="👎 2")
+    btn1 = KeyboardButton(text=f"👍{i}")
+    btn2 = KeyboardButton(text=f"👎{j}")
 
     keyboard = ReplyKeyboardMarkup([[btn1, btn2]], resize_keyboard=True)
 
@@ -22,8 +24,24 @@ def start(update: Update, context:CallbackContext):
 
 def like_and_dislike(update: Update, context: CallbackContext):
     text = update.message.text
+    bot = context.bot
+    chat_id = update.message.chat.id
+    global i
+    global j
+    if text[0]=='👍':
+        i+=1
 
-    print(text)
+    if text[0]=='👎':
+        j+=1
+
+    btn1 = KeyboardButton(text=f"👍{i}")
+    btn2 = KeyboardButton(text=f"👎{j}")
+
+    keyboard = ReplyKeyboardMarkup([[btn1, btn2]], resize_keyboard=True)
+
+    bot.sendMessage(chat_id, "salom" , reply_markup=keyboard)
+
+        
 
 
 dp.add_handler(CommandHandler('start', start))
